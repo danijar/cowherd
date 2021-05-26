@@ -1,8 +1,15 @@
-# Cow Herd
+# CowHerd
 
 [![PyPI](https://img.shields.io/pypi/v/cowherd.svg)](https://pypi.python.org/pypi/cowherd/#history)
 
-Partially-observed visual reinforcement learning domain.
+CowHerd is a partially-observed reinforcement learning environment, where the
+player walks around an area and is rewarded for milking cows. The cows try to
+escape and the player can place fences to help capture them. The implementation
+of CowHerd is based on the [Crafter][crafter] environment.
+
+![Cow Herd Video](https://github.com/danijar/cowherd/raw/main/media/video.gif)
+
+[crafter]: https://github.com/danijar/crafter
 
 ## Play Yourself
 
@@ -20,8 +27,6 @@ cowherd
 # Alternative way to start the game
 python3 -m cowherd.run_gui
 ```
-
-![Cow Herd Video](https://github.com/danijar/cowherd/raw/main/media/video.gif)
 
 The following optional command line flags are available:
 
@@ -84,7 +89,7 @@ one of the possible actions:
 | 3 | `move_up` | Walk upwards. |
 | 4 | `move_down` | Walk downwards. |
 | 5 | `do` | Pick up a placed fence or milk a cow. |
-| 6 | `place_fence` | Place a fence inventory. |
+| 6 | `place_fence` | Place a fence in front of the player. |
 
 ## Questions
 
