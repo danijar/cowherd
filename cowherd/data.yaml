@@ -1,0 +1,35 @@
+actions:
+  - noop
+  - move_left
+  - move_right
+  - move_up
+  - move_down
+  - do
+  - place_fence
+
+materials:
+  - water
+  - grass
+  - tree
+  - fence
+  - stone
+
+walkable:
+  - grass
+
+items:
+  - fence
+  - milk
+
+collect:
+  fence: {require: {}, receive: {fence: 1}, leaves: grass}
+
+place:
+  fence: {uses: {fence: 1}, where: [grass]}
+
+make: {}
+
+achievements:
+  - collect_fence
+  - milk_cow
+  - place_fence
