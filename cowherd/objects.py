@@ -114,6 +114,8 @@ class Player(Object):
     self.achievements[f'collect_{material}'] += 1
 
   def _place(self, name, target, material):
+    if not self.is_free(target):
+      return
     info = constants.place[name]
     if material not in info['where']:
       return

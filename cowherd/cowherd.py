@@ -65,6 +65,12 @@ class Env:
         obj.update()
     obs = self._obs()
 
+    trapped = []
+    for obj in self._world.objects:
+      if isinstance(obj, objects.Cow):
+        for dir_ in ((-1, 0), (+1, 0), (0, -1), (0, +1)):
+          trapped.append(not obj.is_free(obj.pos + np.array(dir_)))
+
     if self._milked < self._player.achievements['milk_cow']:
       self._milked = self._player.achievements['milk_cow']
       reward = 1.0
@@ -74,6 +80,7 @@ class Env:
     info = {
         'inventory': self._player.inventory.copy(),
         'achievements': self._player.achievements.copy(),
+        'trapped': np.mean(trapped),
         'discount': 1.0,
     }
     return obs, reward, done, info

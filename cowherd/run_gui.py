@@ -43,7 +43,6 @@ def main():
   was_done = False
   if args.record:
     frames = []
-  print('Diamonds exist:', env._world.count('diamond'))
 
   pygame.init()
   screen = pygame.display.set_mode(args.window)
@@ -69,8 +68,7 @@ def main():
         action = 'noop'
 
     messages = []
-    obs, reward, done, _ = env.step(env.action_names.index(action))
-
+    obs, reward, done, info = env.step(env.action_names.index(action))
     unlocked = {
         name for name, count in env._player.achievements.items()
         if count > 0 and name not in achievements}
