@@ -15,6 +15,7 @@ def main():
   parser.add_argument('--seed', type=int, default=None)
   parser.add_argument('--view', type=int, nargs=2, default=(7, 7))
   parser.add_argument('--num_cows', type=int, default=3)
+  parser.add_argument('--reward', type=str, default='milked')
   parser.add_argument('--length', type=int, default=None)
   parser.add_argument('--health', type=int, default=5)
   parser.add_argument('--window', type=int, nargs=2, default=(800, 800))
@@ -35,7 +36,8 @@ def main():
     print(f'  {pygame.key.name(key)}: {action}')
 
   env = cowherd.Env(
-      args.view, args.window, args.length, args.num_cows, args.seed)
+      args.view, args.window, args.length, args.num_cows, args.reward,
+      args.seed)
   env.reset()
   achievements = set()
   duration = 0

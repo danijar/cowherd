@@ -12,6 +12,7 @@ def main():
   parser.add_argument('--seed', type=int, default=None)
   parser.add_argument('--view', type=int, nargs=2, default=(7, 7))
   parser.add_argument('--num_cows', type=int, default=3)
+  parser.add_argument('--reward', type=str, default='milked')
   parser.add_argument('--size', type=int, nargs=2, default=(64, 64))
   parser.add_argument('--length', type=int, default=1000)
   parser.add_argument('--health', type=int, default=5)
@@ -20,7 +21,7 @@ def main():
 
   random = np.random.RandomState(args.seed)
   env = cowherd.Env(
-      args.view, args.size, args.length, args.num_cows, args.seed)
+      args.view, args.size, args.length, args.num_cows, args.reward, args.seed)
   if args.record:
     frames = []
 

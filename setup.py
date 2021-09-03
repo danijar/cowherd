@@ -4,7 +4,7 @@ import pathlib
 
 setuptools.setup(
     name='cowherd',
-    version='0.2.0',
+    version='0.3.0',
     description='Partially-observed visual reinforcement learning domain.',
     url='http://github.com/danijar/cowherd',
     long_description=pathlib.Path('README.md').read_text(),

@@ -1,3 +1,5 @@
+import collections
+
 import numpy as np
 
 from . import constants
@@ -6,16 +8,32 @@ from . import objects
 from . import worldgen
 
 
-class Env:
+# Gym is an optional dependency.
+try:
+  import gym
+  DiscreteSpace = gym.spaces.Discrete
+  BoxSpace = gym.spaces.Box
+  DictSpace = gym.spaces.Dict
+  BaseClass = gym.Env
+except ImportError:
+  DiscreteSpace = collections.namedtuple('DiscreteSpace', 'n')
+  BoxSpace = collections.namedtuple('BoxSpace', 'low, high, shape, dtype')
+  DictSpace = collections.namedtuple('DictSpace', 'spaces')
+  BaseClass = object
+
+
+class Env(BaseClass):
 
   def __init__(
-      self, view=(7, 7), size=(64, 64), length=1000, num_cows=3, seed=None):
+      self, view=(7, 7), size=(64, 64), length=1000, num_cows=3,
+      reward='milked', seed=None):
     view = np.array(view if hasattr(view, '__len__') else (view, view))
     size = np.array(size if hasattr(size, '__len__') else (size, size))
     unit = size // view
     self._size = size
     self._length = length
     self._num_cows = num_cows
+    self._reward = reward
     self._seed = seed
     self._episode = 0
     self._world = engine.World((14, 14))
@@ -33,11 +51,11 @@ class Env:
 
   @property
   def observation_space(self):
-    return engine.BoxSpace(0, 255, tuple(self._size) + (3,), np.uint8)
+    return BoxSpace(0, 255, tuple(self._size) + (3,), np.uint8)
 
   @property
   def action_space(self):
-    return engine.DiscreteSpace(len(constants.actions))
+    return DiscreteSpace(len(constants.actions))
 
   @property
   def action_names(self):
@@ -70,17 +88,24 @@ class Env:
       if isinstance(obj, objects.Cow):
         for dir_ in ((-1, 0), (+1, 0), (0, -1), (0, +1)):
           trapped.append(not obj.is_free(obj.pos + np.array(dir_)))
+    trapped = np.mean(trapped)
 
-    if self._milked < self._player.achievements['milk_cow']:
-      self._milked = self._player.achievements['milk_cow']
-      reward = 1.0
+    if self._reward == 'milked':
+      if self._milked < self._player.achievements['milk_cow']:
+        self._milked = self._player.achievements['milk_cow']
+        reward = 1.0
+      else:
+        reward = 0.0
+    elif self._reward == 'trapped':
+      reward = trapped
     else:
-      reward = 0.0
+      raise NotImplementedError(self._reward)
     done = self._length and self._step >= self._length
     info = {
         'inventory': self._player.inventory.copy(),
         'achievements': self._player.achievements.copy(),
-        'trapped': np.mean(trapped),
+        'trapped': trapped,
+        'milked': self._milked,
         'discount': 1.0,
     }
     return obs, reward, done, info

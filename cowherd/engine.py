@@ -1,14 +1,8 @@
-import collections
 import pathlib
 
 import imageio
 import numpy as np
 from PIL import Image
-
-
-DiscreteSpace = collections.namedtuple('DiscreteSpace', 'n')
-BoxSpace = collections.namedtuple('BoxSpace', 'low, high, shape, dtype')
-DictSpace = collections.namedtuple('DictSpace', 'spaces')
 
 
 class AttrDict(dict):
